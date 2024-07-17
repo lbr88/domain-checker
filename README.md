@@ -40,13 +40,15 @@ This project checks the availability of a specified domain and sends notificatio
 
    Or, if you want to override any values directly from the command line:
    ```
-   helm install domain-checker ./domain-checker --set domain=yourdomain.com --set webhookUrl=https://your-mattermost-webhook-url
+   helm install domain-checker ./domain-checker --set domain=yourdomain.com --set webhookUrl=https://your-mattermost-webhook-url --set opsGenieApiKey=your-opsgenie-api-key
    ```
 
 5. To upgrade the deployment after making changes:
    ```
    helm upgrade domain-checker ./domain-checker
    ```
+# helm repo
+helm repo add lbr88 https://lbr88.github.io/helm-charts
 
 ## Configuration
 

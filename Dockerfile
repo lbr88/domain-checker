@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir python-whois requests opsgenie_sdk
 
 # Define environment variable
 ENV DOMAIN=example.com
-ENV WEBHOOK_URL=https://localhost/ 
+ENV WEBHOOK_URL=https://localhost/
 
 # Run script.py when the container launches
 CMD ["python", "script.py"]
