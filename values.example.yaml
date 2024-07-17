@@ -1,0 +1,17 @@
+image:
+  repository: lbr88/domain-checker
+  tag: latest
+  pullPolicy: IfNotPresent
+
+domain: "example.com"
+webhookUrl: "https://your-mattermost-webhook-url"
+
+schedule: "*/5 * * * *"  # Every 5 minutes
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
