@@ -5,3 +5,4 @@ metadata:
 data:
   DOMAIN: {{ .Values.domain }}
   WEBHOOK_URL: {{ .Values.webhookUrl }}
+  OPSGENIE_API_KEY: {{ .Values.opsgenieApiKey }}

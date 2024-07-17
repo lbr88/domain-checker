@@ -23,6 +23,11 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-config
                   key: WEBHOOK_URL
+            - name: OPSGENIE_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-config
+                  key: OPSGENIE_API_KEY
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
           restartPolicy: OnFailure

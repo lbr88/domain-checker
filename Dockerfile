@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir python-whois requests
+RUN pip install --no-cache-dir python-whois requests opsgenie_sdk
 
 # Define environment variable
 ENV DOMAIN=example.com

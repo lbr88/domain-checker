@@ -11,14 +11,17 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def send_alert_to_opsgenie(api_key, message):
+def send_alert_to_opsgenie(api_key, message, domain):
     """send alert to Opsgenie when domain is available"""
     configuration = opsgenie_sdk.Configuration()
     configuration.api_key["Authorization"] = api_key
     api_client = opsgenie_sdk.api_client.ApiClient(configuration)
     alert_api = opsgenie_sdk.AlertApi(api_client)
     body = opsgenie_sdk.CreateAlertPayload(
-        message=message, description="Domain is available", priority="P1"
+        message=message,
+        description="Domain is available",
+        priority="P1",
+        alias=f"domain-availability-{domain}",
     )
     try:
         response = alert_api.create_alert(create_alert_payload=body)
@@ -58,9 +61,10 @@ def check_domain_availability(domain, webhook_url=None, opsgenie_api_key=None):
                 send_alert_to_opsgenie(
                     opsgenie_api_key,
                     f"🎉 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: The domain {domain} is now available!",
+                    domain,
                 )
             if webhook_url is not None:
-                message = f"@xenon 🎉 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: The domain {domain} is now available!"
+                message = f"🎉 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: The domain {domain} is now available!"
                 send_mattermost_notification(webhook_url, message)
 
     except whois.parser.PywhoisError:

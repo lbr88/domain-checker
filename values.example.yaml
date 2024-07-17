@@ -1,10 +1,11 @@
 image:
   repository: lbr88/domain-checker
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 domain: "example.com"
 webhookUrl: "https://your-mattermost-webhook-url"
+opsgenieApiKey: "b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1"
 
 schedule: "*/5 * * * *"  # Every 5 minutes
 
