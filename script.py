@@ -49,22 +49,35 @@ def send_mattermost_notification(webhook_url, message):
 def check_domain_availability(domain, webhook_url=None, opsgenie_api_key=None):
     try:
         domain_info = whois.whois(domain)
+        expiration_date = domain_info.expiration_date
+        # Parse to get delete date
+        whois_text = domain_info.text
+        delete_date = None
+        for line in whois_text.split("\n"):
+            if "Delete date:" in line:
+                delete_date = line.split(":")[1].strip()
+                break
         current_date = datetime.now()
 
         if domain_info.domain_name:
             # py-lint: disable=C0301
+            message = f"📅 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: {domain} is still registered. expires: {expiration_date}"
+            if delete_date is not None:
+                message += f" delete date: {delete_date}"
+            logger.info(message)
+            logger.debug(domain_info)
             if webhook_url is not None:
-                message = f"📅 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: {domain} is still registered."
                 send_mattermost_notification(webhook_url, message)
         else:
+            message = f"🎉 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: The domain {domain} is now available!"
+            logger.info(message)
             if opsgenie_api_key is not None:
                 send_alert_to_opsgenie(
                     opsgenie_api_key,
-                    f"🎉 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: The domain {domain} is now available!",
+                    message,
                     domain,
                 )
             if webhook_url is not None:
-                message = f"🎉 {current_date.strftime('%Y-%m-%d %H:%M:%S')}: The domain {domain} is now available!"
                 send_mattermost_notification(webhook_url, message)
 
     except whois.parser.PywhoisError:
