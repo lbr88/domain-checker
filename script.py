@@ -25,7 +25,7 @@ def send_alert_to_opsgenie(api_key, message, domain):
         tags=["domain-availability", domain, "available"],
     )
     try:
-        response = alert_api.create_alert(create_alert_payload=body)
+        alert_api.create_alert(create_alert_payload=body)
         logging.info("Alert sent to Opsgenie successfully.")
     except opsgenie_sdk.ApiException as e:
         logging.error(f"Failed to send alert to Opsgenie: {e}")
