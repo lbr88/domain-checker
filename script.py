@@ -22,12 +22,13 @@ def send_alert_to_opsgenie(api_key, message, domain):
         description="Domain is available",
         priority="P1",
         alias=f"domain-availability-{domain}",
+        tags=["domain-availability", domain, "available"],
     )
     try:
         response = alert_api.create_alert(create_alert_payload=body)
-        print("Alert sent to Opsgenie successfully.")
+        logging.info("Alert sent to Opsgenie successfully.")
     except opsgenie_sdk.ApiException as e:
-        print(f"Failed to send alert to Opsgenie: {e}")
+        logging.error(f"Failed to send alert to Opsgenie: {e}")
         sys.exit(1)
 
 
@@ -41,9 +42,9 @@ def send_mattermost_notification(webhook_url, message):
             timeout=5,
         )
         response.raise_for_status()
-        print("Notification sent to Mattermost successfully.")
+        logging.info("Notification sent to Mattermost successfully.")
     except requests.exceptions.RequestException as e:
-        print(f"Failed to send notification to Mattermost: {e}")
+        logging.error(f"Failed to send notification to Mattermost: {e}")
 
 
 def check_domain_availability(domain, webhook_url=None, opsgenie_api_key=None):
@@ -82,7 +83,7 @@ def check_domain_availability(domain, webhook_url=None, opsgenie_api_key=None):
 
     except whois.parser.PywhoisError:
         message = f"❗ {current_date.strftime('%Y-%m-%d %H:%M:%S')}: An error occurred while checking {domain}. It might be available."
-        print(message)
+        logging.error(message)
         send_mattermost_notification(webhook_url, message)
 
 
